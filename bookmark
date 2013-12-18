@@ -1,0 +1,49 @@
+<!--/ 즐겨찾기 /-->
+
+var smartskinAutoHomeButtonInstaller = "on"; //고객사별 변경 필요
+var sm_UserAgent = navigator.userAgent.toLowerCase();
+var sm_BlockDevice1 = sm_UserAgent.indexOf("iphone");
+var sm_BlockDevice2 = sm_UserAgent.indexOf("ipad");
+var sm_BlockDevice = sm_BlockDevice1 + sm_BlockDevice2;
+if(smartskinAutoHomeButtonInstaller=="on" && sm_BlockDevice == -2){
+	if(typeof(Storage)!=="undefined") {
+		if(localStorage.sm_HomeButtonType!="installComplete"){
+			
+				
+			var sm_HomeButtonTitle = "코어바디"; //고객사별 변경 필요
+			var sm_LogAnalysisCode = "ad=smartskin_Bookmark"; //고객사별 변경 필요
+				
+			var sm_HomeButtonTitle = encodeURI(sm_HomeButtonTitle);
+			var sm_HomePageUri = document.domain;
+			var sm_WebRootPathUri = "http://"+document.domain;
+			if(sm_HomePageUri.indexOf("smartskin")>=0){
+				sm_HomePageUri = "http://"+document.domain+"/";
+			}else{
+				if(sm_HomePageUri.indexOf("m.")>=0){
+					//cafe24
+					sm_HomePageUri = "http://"+document.domain+"/";
+				}else{
+					//makeshop
+					sm_HomePageUri = "http://"+document.domain+"/m/main.html";
+				}
+			}
+			//var sm_HomeButtonIconUri = sm_WebRootPathUri+$('link[rel="apple-touch-icon-precomposed"]').attr("href");
+			var sm_HomeButtonIconUri="";
+			var linkElements=document.getElementsByTagName('link');
+			for (var i = 0; i < linkElements.length; i++){
+				if (linkElements[i].getAttribute("rel")=="apple-touch-icon"){
+					sm_HomeButtonIconUri=linkElements[i].getAttribute("href");
+				}
+			}
+			var sm_naver_customUrlScheme= "naversearchapp://addshortcut?url="+sm_HomePageUri+"%3F"+sm_LogAnalysisCode+"&icon="+sm_HomeButtonIconUri+"&title="+sm_HomeButtonTitle+"&oq="+sm_HomeButtonTitle+"&serviceCode=nstore&version=7";
+				
+			var smartskin_AutoHomeButtonAdd=document.getElementById("smartskin_AutoHomeButtonAdd");
+			smartskin_AutoHomeButtonAdd.src=sm_naver_customUrlScheme;
+			localStorage.sm_HomeButtonType = "installComplete";
+		}else{
+			// console.log("already install");
+		}
+	}else{
+		console.log("localStorage not Support Browser: www.smartskin.co.kr");
+	}
+}
